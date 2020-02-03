@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+    <title>Lower</title>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("span").click(myPOST);
+            function myPOST() {
+                var myRead = $("#input1").val();
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8080",
+                    dataType: 'text',
+                    data: { value: "text=" + myRead },
+                    success: function (data) {
+                        alert("passt");
+                        console.log(data);
+                        $('.myControl').val(data);
+                    },
+                    error: function (error) {
+
+                        console.log(error);
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <h1>Lower Plugin</h1>
+            </div>
+        </div>
+
+
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="input1" class="sr-only">Text</label>
+            <input type="text" class="form-control myInput" id="input1" placeholder="Your text here">
+        </div>
+        <span class="btn btn-primary mb-2 mySubmit" id="mySubmit">Submit</span>
+
+
+        <div class="col-sm-12">
+            <input class="form-control myControl" type="text" placeholder="ToLower result.." readonly>
+        </div>
+
+    </div>
+</body>
+
+</html>

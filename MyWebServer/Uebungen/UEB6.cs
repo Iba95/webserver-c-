@@ -7,7 +7,7 @@ using MyWebServer;
 
 namespace Uebungen
 {
-    public class UEB6 : IUEB6
+    public class UEB6
     {
         public void HelloWorld()
         {
@@ -15,47 +15,47 @@ namespace Uebungen
 
         public IPluginManager GetPluginManager()
         {
-            throw new NotImplementedException();
+            return new PluginManager();
         }
 
         public IRequest GetRequest(System.IO.Stream network)
         {
-            throw new NotImplementedException();
+            return new Request(network);
         }
 
         public string GetNaviUrl()
         {
-            throw new NotImplementedException();
+            return "/navi";
         }
 
         public IPlugin GetNavigationPlugin()
         {
-            throw new NotImplementedException();
+            return new NaviPlugin();
         }
 
         public IPlugin GetTemperaturePlugin()
         {
-            throw new NotImplementedException();
+            return new TempPlugin();
         }
 
         public string GetTemperatureRestUrl(DateTime from, DateTime until)
         {
-            throw new NotImplementedException();
+            return $"/temp?type=rest&from={from.ToString()}&until={until.ToString()}";
         }
 
         public string GetTemperatureUrl(DateTime from, DateTime until)
         {
-            throw new NotImplementedException();
+            return $"/temp?from={from.ToString()}&until={until.ToString()}";
         }
 
         public IPlugin GetToLowerPlugin()
         {
-            throw new NotImplementedException();
+            return new LowerPlugin();
         }
 
         public string GetToLowerUrl()
         {
-            throw new NotImplementedException();
+            return "/lower?lower_plugin=true";
         }
     }
 }

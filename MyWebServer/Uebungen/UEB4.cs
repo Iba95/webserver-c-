@@ -7,7 +7,7 @@ using MyWebServer;
 
 namespace Uebungen
 {
-    public class UEB4 : IUEB4
+    public class UEB4
     {
         public void HelloWorld()
         {
@@ -15,17 +15,17 @@ namespace Uebungen
 
         public IPluginManager GetPluginManager()
         {
-            throw new NotImplementedException();
+            return new PluginManager();
         }
 
         public IRequest GetRequest(System.IO.Stream network)
         {
-            throw new NotImplementedException();
+            return new Request(network);
         }
 
         public IResponse GetResponse()
         {
-            throw new NotImplementedException();
+            return new Response();
         }
     }
 }

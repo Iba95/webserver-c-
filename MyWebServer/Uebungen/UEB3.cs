@@ -5,9 +5,10 @@ using System.Text;
 using BIF.SWE1.Interfaces;
 using MyWebServer;
 
+
 namespace Uebungen
 {
-    public class UEB3 : IUEB3
+    public class UEB3
     {
         public void HelloWorld()
         {
@@ -15,17 +16,17 @@ namespace Uebungen
 
         public IRequest GetRequest(System.IO.Stream network)
         {
-            throw new NotImplementedException();
+            return new Request(network);
         }
 
         public IResponse GetResponse()
         {
-            throw new NotImplementedException();
+            return new Response();
         }
 
         public IPlugin GetTestPlugin()
         {
-            throw new NotImplementedException();
+            return new TestPlugin();
         }
     }
 }

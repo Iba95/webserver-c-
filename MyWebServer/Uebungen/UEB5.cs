@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using BIF.SWE1.Interfaces;
@@ -7,7 +8,7 @@ using MyWebServer;
 
 namespace Uebungen
 {
-    public class UEB5 : IUEB5
+    public class UEB5
     {
         public void HelloWorld()
         {
@@ -15,27 +16,28 @@ namespace Uebungen
 
         public IPluginManager GetPluginManager()
         {
-            throw new NotImplementedException();
+            return new PluginManager();
         }
 
         public IRequest GetRequest(System.IO.Stream network)
         {
-            throw new NotImplementedException();
+            return new Request(network);
         }
 
         public IPlugin GetStaticFilePlugin()
         {
-            throw new NotImplementedException();
+            return new StaticFilePlugin();
         }
 
         public string GetStaticFileUrl(string fileName)
         {
-            throw new NotImplementedException();
+            string path = Path.Combine(Environment.CurrentDirectory, "statics");
+            return Path.Combine(path,fileName);
         }
 
         public void SetStatiFileFolder(string folder)
         {
-            throw new NotImplementedException();
+            Environment.CurrentDirectory = folder;
         }
     }
 }

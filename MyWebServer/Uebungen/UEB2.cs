@@ -7,7 +7,7 @@ using MyWebServer;
 
 namespace Uebungen
 {
-    public class UEB2 : IUEB2
+    public class UEB2
     {
         public void HelloWorld()
         {
@@ -20,12 +20,12 @@ namespace Uebungen
 
         public IRequest GetRequest(System.IO.Stream network)
         {
-            throw new NotImplementedException();
+            return new Request(network);
         }
 
         public IResponse GetResponse()
         {
-            throw new NotImplementedException();
+            return new Response();
         }
     }
 }
