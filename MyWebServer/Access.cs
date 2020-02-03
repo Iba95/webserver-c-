@@ -11,9 +11,24 @@ namespace MyWebServer
     {
         string connectionString = "SERVER=127.0.0.1;DATABASE=temperature;UID=root;PASSWORD=;Convert Zero Datetime=True;";
 
-        public void Insert(Temperature temp)
+        public void addTemp(Temperature temp)
         {
+            string addQuery = "INSERT INTO temp(date, celsius) VALUES (@date,@celsius);";
 
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (MySqlCommand command = new MySqlCommand(addQuery, connection))
+                {
+                    
+                    command.Parameters.AddWithValue("@date", temp.Date);
+                    command.Parameters.AddWithValue("@celsius", temp.Celsius);
+                    command.Prepare();
+
+                    command.ExecuteNonQuery();
+                   
+                }
+            }
         }
 
         public List<Temperature> getTemperature()

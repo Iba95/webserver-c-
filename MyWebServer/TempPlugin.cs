@@ -17,17 +17,19 @@ namespace MyWebServer
         {
             database = new Access();
             database.getTemperature();
-            //ThreadPool.QueueUserWorkItem(Sensor);
+            ThreadPool.QueueUserWorkItem(Sensor);
         }
         private void Sensor(object obj)
         {
-            //Random rnd = new Random();
-            //while (true)
-            //{
-       
-                    
-            //    Thread.Sleep(10000);
-            //}
+            Random random = new Random();
+            while (true)
+            {
+                if (database != null)
+                {
+                    database.addTemp(new Temperature(DateTime.Now, (random.NextDouble() - 0.5) * 60.0));
+                }
+                Thread.Sleep(10000);
+            }
         }
         public float CanHandle(IRequest req)
         {
@@ -42,10 +44,7 @@ namespace MyWebServer
             //else
             //return 0.5f;
             //return 0f;
-            if (req == null || req.Url == null || req.Url.Segments.Length < 1)
-            {
-                return 0.0f;
-            }
+  
 
             float check = 0f;
 
