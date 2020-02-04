@@ -64,24 +64,28 @@ namespace MyWebServer
         public IResponse Handle(IRequest req)
         {
             IResponse res = new Response();
+            res.StatusCode = 400;
 
-            string content = "";
-            //createRandomValues();
+            string content;
 
-            string from = "";
-            string until = "";
+            string from;
+            string until;
 
             if (req.Url.Parameter.ContainsKey("from") && req.Url.Parameter.ContainsKey("until"))
             {
                 from = req.Url.Parameter["from"];
                 until = req.Url.Parameter["until"];
             }
+            else
+            {
+                return res;
+            }
 
             res.StatusCode = 200;
             //if (req.Url.Parameter.ContainsKey("type"))
             //{
                 res.ContentType = "text/xml";
-                content = createXML(database.getTemperature());
+                content = createXML(database.getTemperature(DateTime.Parse(from), DateTime.Parse(until)));
             //}         
             //else
             //{
@@ -99,39 +103,23 @@ namespace MyWebServer
         public string returnJSON(string[] data)
         {
             //StringBuilder content = new StringBuilder();
-            //content.Append("<html><body>");
-            //content.Append("<h1>Temperature</h1>");
-            //content.Append("<table>");
-            //content.Append("<tr><th>ID</th><th>Date</th><th>Celsius</th><th>Fahrenheit</th></tr>");
 
+
+            // StringBuilder content = new StringBuilder();
+            //content.Append("[");
             //for (int i = 0; i < data.Length; i++)
             //{
             //    string[] line = data[i].Split(';');
-            //    content.Append("<tr>");
-            //    content.Append("<td>").Append(line[0]).Append("</td>");
-            //    content.Append("<td>").Append(line[1]).Append("</td>");
-            //    content.Append("<td>").Append(line[2]).Append("</td>");
-            //    content.Append("<td>").Append(line[3]).Append("</td>");
-            //    content.Append("</tr>");
-            //}        
-            //content.Append("</table></body></html>");
-
+            //    content.Append("{");
+            //    content.Append("'id':").Append(line[0]).Append(",");
+            //    content.Append("'date':'").Append(line[1]).Append("',");
+            //    content.Append("'celsius':").Append(line[2]).Append(",");
+            //    content.Append("'fahrenheit':").Append(line[3]).Append("");
+            //    content.Append("},");
+            //}
+            //content.Append("]");
             //return content.ToString();
-
-             StringBuilder content = new StringBuilder();
-            content.Append("[");
-            for (int i = 0; i < data.Length; i++)
-            {
-                string[] line = data[i].Split(';');
-                content.Append("{");
-                content.Append("'id':").Append(line[0]).Append(",");
-                content.Append("'date':'").Append(line[1]).Append("',");
-                content.Append("'celsius':").Append(line[2]).Append(",");
-                content.Append("'fahrenheit':").Append(line[3]).Append("");
-                content.Append("},");
-            }
-            content.Append("]");
-            return content.ToString();
+            return null;
         }
         /// <summary>
         ///  Creates and returns xml string with a table containing temperature data

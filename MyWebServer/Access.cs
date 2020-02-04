@@ -56,5 +56,34 @@ namespace MyWebServer
             }
             return result;
         }
+
+        public List<Temperature> getTemperature(DateTime from, DateTime until)
+        {
+            string getQuery = "SELECT * FROM temp WHERE date > @from AND date < @until;";
+
+            List<Temperature> result = new List<Temperature>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                using (MySqlCommand command = new MySqlCommand(getQuery, connection))
+                {
+                    command.Parameters.AddWithValue("@from", from);
+                    command.Parameters.AddWithValue("@until", until);
+
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Temperature temp = new Temperature();
+                            temp.ID = (int)reader["ID"];
+                            temp.Date = (DateTime)reader["date"];
+                            temp.Celsius = (double)reader["celsius"];
+                            result.Add(temp);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
