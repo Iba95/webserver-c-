@@ -7,47 +7,18 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using BIF.SWE1.Interfaces;
-//using MySql.Data.MySqlClient;
 
 namespace MyWebServer
 {
     class Program
     {
-        
+
         static void Main(string[] args)
         {
             //Listen();         
             Server server = new Server();
             server.Start();
 
-            //try
-            //{
-            //    using (MySqlConnection con = new MySqlConnection("SERVER=127.0.0.1;DATABASE=temperature;UID=root;PASSWORD=;"))
-            //    {
-                    
-            //        con.Open();
-            //        using (MySqlCommand command = new MySqlCommand("SELECT * FROM temp;", con))
-            //        {
-                        
-            //            using (MySqlDataReader reader = command.ExecuteReader())
-            //            {
-            //                Console.WriteLine("yow");
-            //                while (reader.Read())
-            //                {
-          
-            //                    Console.WriteLine(reader["ID"]);
-            //                    Console.ReadKey();
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    throw new Exception();
-            //}
-           
-           
         }
   
         //public static void Listen()

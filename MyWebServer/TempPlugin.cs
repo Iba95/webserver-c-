@@ -26,7 +26,7 @@ namespace MyWebServer
             {
                 if (database != null)
                 {
-                    database.addTemp(new Temperature(DateTime.Now, (random.NextDouble() - 0.5) * 60.0));
+                    database.addTemp(new Temperature(DateTime.Now, random.NextDouble() * (100.00 - (-20.00)) + (-20.00)));
                 }
                 Thread.Sleep(10000);
             }
@@ -78,16 +78,16 @@ namespace MyWebServer
             }
 
             res.StatusCode = 200;
-            if (req.Url.Parameter.ContainsKey("type"))
-            {
+            //if (req.Url.Parameter.ContainsKey("type"))
+            //{
                 res.ContentType = "text/xml";
-                content = createXML(getValues(from,until));
-            }         
-            else
-            {
-                res.ContentType = "text/json";
-                content = returnJSON(getValues(from, until));
-            }
+                content = createXML(database.getTemperature());
+            //}         
+            //else
+            //{
+            //    res.ContentType = "text/json";
+            //    content = returnJSON(database.getTemperature());
+            //}
                 
 
             res.SetContent(content);
@@ -136,97 +136,99 @@ namespace MyWebServer
         /// <summary>
         ///  Creates and returns xml string with a table containing temperature data
         /// </summary>
-        public string createXML(string[] data)
+        public string createXML(List<Temperature> data)
         {
             XmlDocument document = new XmlDocument();
             XmlElement root = (XmlElement)document.AppendChild(document.CreateElement("Temperatures"));
 
-            for (int i = 0; i < data.Length - 1; i++)
+            foreach (Temperature current in data)
             {
-                string[] line = data[i].Split(';');
+                // Entry root element
+                XmlElement entry = (XmlElement)root.AppendChild(document.CreateElement("Entry"));
+                entry.SetAttribute("id", current.ID.ToString());
 
-                XmlElement id = (XmlElement)root.AppendChild(document.CreateElement("ID"));
-                id.SetAttribute("id", line[0]);
+                // Date element containing the date in yyyy-MM-dd hh:mm:ss format
+                XmlElement date = (XmlElement)entry.AppendChild(document.CreateElement("Date"));
+                date.AppendChild(document.CreateTextNode(current.Date.ToString("yyyy-MM-dd hh:mm:ss")));
 
+                // Temperature element in Kelvin
+                XmlElement kelvin = (XmlElement)entry.AppendChild(document.CreateElement("Kelvin"));
+                kelvin.AppendChild(document.CreateTextNode(current.Kelvin.ToString().Replace(',', '.')));
 
-                XmlElement date = (XmlElement)id.AppendChild(document.CreateElement("Date"));
-                date.AppendChild(document.CreateTextNode(line[1]));
+                // Temperature element in Celsius
+                XmlElement celsius = (XmlElement)entry.AppendChild(document.CreateElement("Celsius"));
+                celsius.AppendChild(document.CreateTextNode(current.Celsius.ToString().Replace(',', '.')));
 
-
-                XmlElement celsius = (XmlElement)id.AppendChild(document.CreateElement("Celsius"));
-                celsius.AppendChild(document.CreateTextNode(line[2]));
-
-
-                XmlElement fahrenheit = (XmlElement)id.AppendChild(document.CreateElement("Fahrenheit"));
-                fahrenheit.AppendChild(document.CreateTextNode(line[3]));
-
+                // Temperature element in Fahrenheit
+                XmlElement fahrenheit = (XmlElement)entry.AppendChild(document.CreateElement("Fahrenheit"));
+                fahrenheit.AppendChild(document.CreateTextNode(current.Fahrenheit.ToString().Replace(',', '.')));
             }
 
             return document.OuterXml;
-            //return "not working :(";
         }
+
         /// <summary>
         /// Returns string array with the temperature data read from file
         /// </summary>
-        public string[] getValues(string from, string until)
-        {
-            string path = @"C:\Users\islam\Documents\Arbeit\FH\SWE\SWE1-CS\MyWebServer\Data\temps.txt";
-            string readText = File.ReadAllText(path);
-            string[] vals = readText.Split('\n');
+        //public string[] getValues(string from, string until)
+        //{
+        //    string path = @"C:\Users\islam\Documents\Arbeit\FH\SWE\SWE1-CS\MyWebServer\Data\temps.txt";
+        //    string readText = File.ReadAllText(path);
+        //    string[] vals = readText.Split('\n');
 
-            if(!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(until))
-            {
-                List<string> newVals = new List<string>();
-                foreach (var item in vals)
-                {
-                    string[] line = item.Split(';');
+        //    if(!String.IsNullOrEmpty(from) && !String.IsNullOrEmpty(until))
+        //    {
+        //        List<string> newVals = new List<string>();
+        //        foreach (var item in vals)
+        //        {
+        //            string[] line = item.Split(';');
 
-                    DateTime date = DateTime.Parse(line[1]);
-                    DateTime f = DateTime.Parse(from);
-                    DateTime u = DateTime.Parse(until);
+        //            DateTime date = DateTime.Parse(line[1]);
+        //            DateTime f = DateTime.Parse(from);
+        //            DateTime u = DateTime.Parse(until);
 
-                    if (date.Ticks > f.Ticks && date.Ticks < u.Ticks)
-                    {
-                         newVals.Add(item);
-                    }
-                    vals = newVals.ToArray();
-                }
-            }
-            return vals;
-        }
+        //            if (date.Ticks > f.Ticks && date.Ticks < u.Ticks)
+        //            {
+        //                 newVals.Add(item);
+        //            }
+        //            vals = newVals.ToArray();
+        //        }
+        //    }
+        //    return vals;
+        //}
         /// <summary>
         /// Creates Random Values for temperature data and saves them to a file
         /// </summary>
-        public void createRandomValues()
-        {
-            Random rnd = new Random();
-            List<string> vals = new List<string>();
-            string path = @"C:\Users\islam\Documents\Arbeit\FH\SWE\SWE1-CS\MyWebServer\Data\temps.txt";
-            string createText = "";
-            for (int i = 0; i < 10000; i++)
-            {
+        //public void createRandomValues()
+        //{
+        //    Random rnd = new Random();
+        //    List<string> vals = new List<string>();
+        //    string path = @"C:\Users\islam\Documents\Arbeit\FH\SWE\SWE1-CS\MyWebServer\Data\temps.txt";
+        //    string createText = "";
+        //    for (int i = 0; i < 10000; i++)
+        //    {
                 
-                int id = rnd.Next(1, 1000);  
-                int celsius = rnd.Next(1, 40);   
-                int fahrenheit = (celsius * 9) / 5 + 32;
-                string date = RandomDay(rnd).ToString();
+        //        int id = rnd.Next(1, 1000);  
+        //        int celsius = rnd.Next(1, 40);   
+        //        int fahrenheit = (celsius * 9) / 5 + 32;
+        //        string date = RandomDay(rnd).ToString();
 
                 
-                createText += $"{id};{date};{celsius};{fahrenheit};\n";
-                //vals.Add(createText);
-            }
+        //        createText += $"{id};{date};{celsius};{fahrenheit};\n";
+        //        //vals.Add(createText);
+        //    }
 
-            File.WriteAllText(path, createText);
+        //    File.WriteAllText(path, createText);
             
-        }
+        //}
         /// <summary>
         /// Returns random generated Date
         /// </summary>
-        DateTime RandomDay(Random gen)
-        {    
-            DateTime start = new DateTime(2010, 1, 1);
-            int range = (DateTime.Today - start).Days;
-            return start.AddDays(gen.Next(range));
-        }
+        //DateTime RandomDay(Random gen)
+        //{    
+        //    DateTime start = new DateTime(2010, 1, 1);
+        //    int range = (DateTime.Today - start).Days;
+        //    return start.AddDays(gen.Next(range));
+        //}
     }
 }
