@@ -8,13 +8,17 @@ namespace MyWebServer
 {
     class Temperature
     {
-        public Temperature() : this(DateTime.Now) { }
-        public Temperature(DateTime date) : this(date, 0.0) { }
-        public Temperature(double celsius) : this(DateTime.Now, celsius) { }
+ 
         public Temperature(DateTime date, double celsius)
         {
             Date = date;
             Celsius = celsius;
+        }
+        public Temperature(int id, DateTime date, double celsius)
+        {
+            Date = date;
+            Celsius = celsius;
+            ID = id;
         }
         public int ID { get; set; } = 0;
         public DateTime Date { get; set; } = DateTime.Now;

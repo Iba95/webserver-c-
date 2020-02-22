@@ -42,9 +42,11 @@ namespace MyWebServer
             bool segmentCheck1 = Array.Exists(req.Url.Segments, element => element.ToLower() == "index");
             bool segmentCheck2 = Array.Exists(req.Url.Segments, element => element.ToLower() == "index.html");
 
+            res.AddHeader("Content-Type", "text/html; chartset=UTF-8");
+
             if (req.Url.RawUrl == "/" || segmentCheck1 || segmentCheck2)
             {
-                res.AddHeader("Content-Type", "text/html; chartset=UTF-8");
+                
                 res.StatusCode = 200;
 
                 if (File.Exists(path + @"\index.html")){ res.SetContent(File.ReadAllBytes(path + @"\index.html"));}

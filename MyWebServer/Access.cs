@@ -45,10 +45,10 @@ namespace MyWebServer
                     {
                         while (reader.Read())
                         {
-                            Temperature temp = new Temperature();
-                            temp.ID = (int)reader["ID"];
-                            temp.Date = (DateTime)reader["date"];
-                            temp.Celsius = (double)reader["celsius"];
+                            var id = (int)reader["ID"];
+                            var date = (DateTime)reader["date"];
+                            var celsius = (double)reader["celsius"]; ;
+                            Temperature temp = new Temperature(id, date, celsius);
                             result.Add(temp);
                         }
                     }
@@ -59,7 +59,7 @@ namespace MyWebServer
 
         public List<Temperature> getTemperature(DateTime from, DateTime until)
         {
-            string getQuery = "SELECT * FROM temp WHERE date > @from AND date < @until;";
+            string getQuery = "SELECT * FROM temp WHERE date >= @from AND date <= @until ORDER BY date;";
 
             List<Temperature> result = new List<Temperature>();
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -74,10 +74,11 @@ namespace MyWebServer
                     {
                         while (reader.Read())
                         {
-                            Temperature temp = new Temperature();
-                            temp.ID = (int)reader["ID"];
-                            temp.Date = (DateTime)reader["date"];
-                            temp.Celsius = (double)reader["celsius"];
+                            var id = (int)reader["ID"];
+                            var date = (DateTime)reader["date"];
+                            var celsius = (double)reader["celsius"]; ;
+                            Temperature temp = new Temperature(id,date,celsius);
+                            
                             result.Add(temp);
                         }
                     }

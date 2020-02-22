@@ -16,7 +16,7 @@ namespace MyWebServer
         public TempPlugin()
         {
             database = new Access();
-            database.getTemperature();
+            //database.getTemperature();
             ThreadPool.QueueUserWorkItem(Sensor);
         }
         private void Sensor(object obj)
@@ -33,19 +33,6 @@ namespace MyWebServer
         }
         public float CanHandle(IRequest req)
         {
-            //if (req == null || req.Url == null || req.Url.Segments.Length < 1)
-            //{
-            //    return 0.0f;
-            //}
-            //else if (req.Url.Segments[0] == "temp")
-            //{
-            //    return 0.9f;
-            //}
-            //else
-            //return 0.5f;
-            //return 0f;
-  
-
             float check = 0f;
 
             bool segmentCheck = Array.Exists(req.Url.Segments, element => element.ToLower() == "temp");
@@ -137,7 +124,7 @@ namespace MyWebServer
 
                 // Date element containing the date in yyyy-MM-dd hh:mm:ss format
                 XmlElement date = (XmlElement)entry.AppendChild(document.CreateElement("Date"));
-                date.AppendChild(document.CreateTextNode(current.Date.ToString("yyyy-MM-dd hh:mm:ss")));
+                date.AppendChild(document.CreateTextNode(current.Date.ToString("yyyy-MM-dd")));
 
                 // Temperature element in Kelvin
                 XmlElement kelvin = (XmlElement)entry.AppendChild(document.CreateElement("Kelvin"));
