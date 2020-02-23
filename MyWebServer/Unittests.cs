@@ -44,13 +44,44 @@ namespace MyWebServer
         [Test]
         public void lowerSpecialChars()
         {
-            string specialchars = "ABc +#,.-`+";
+            string specialchars = "ABc +#,.-`+@}{%$*~";
 
             var req = new Request(GetValidRequestStream("/lower", method: "POST", body: string.Format("text={0}", specialchars)));
             var lower = new LowerPlugin();
             var res = lower.Handle(req);
             Assert.That(res.StatusCode, Is.EqualTo(200));
             Assert.That(GetBody(res).ToString(), Does.Contain(specialchars.ToLower()));
+        }
+        [Test]
+        public void tempNoFutureTemps()
+        {
+            Access database = new Access();
+            var datenow = DateTime.Now;
+            datenow = datenow.AddSeconds(10);
+            var datetil = datenow.AddDays(356 * 10);
+            var temps = database.getTemperature(datenow, datetil);
+            Assert.That(temps.Count(), Is.EqualTo(0));
+        }
+        [Test]
+        public void tempsOrdered()
+        {
+            Access database = new Access();
+            var from = "2010-01-01";
+            var until = "2011-01-01";
+            var temps = database.getTemperature(DateTime.Parse(from), DateTime.Parse(until));
+            var tempsordered = temps.OrderBy(x=>x.Date);
+            Assert.IsTrue(temps.SequenceEqual(tempsordered));
+        }
+        [Test]
+        public void lowerAtleast1000Chars()
+        {
+            string str = RandomString(1000);
+
+            var req = new Request(GetValidRequestStream("/lower", method: "POST", body: string.Format("text={0}", str)));
+            var lower = new LowerPlugin();
+            var res = lower.Handle(req);
+            Assert.That(res.StatusCode, Is.EqualTo(200));
+            Assert.That(GetBody(res).ToString(), Does.Contain(str.ToLower()));
         }
 
         //[Test]
@@ -121,6 +152,15 @@ namespace MyWebServer
                 }
             }
             return body;
+        }
+
+        private static string RandomString(int length)
+        {
+            Random random = new Random();
+            const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";
+            var chars = Enumerable.Range(0, length)
+                .Select(x => pool[random.Next(0, pool.Length)]);
+            return new string(chars.ToArray());
         }
     }
 }

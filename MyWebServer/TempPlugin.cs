@@ -69,16 +69,9 @@ namespace MyWebServer
             }
 
             res.StatusCode = 200;
-            //if (req.Url.Parameter.ContainsKey("type"))
-            //{
+     
                 res.ContentType = "text/xml";
                 content = createXML(database.getTemperature(DateTime.Parse(from), DateTime.Parse(until)));
-            //}         
-            //else
-            //{
-            //    res.ContentType = "text/json";
-            //    content = returnJSON(database.getTemperature());
-            //}
                 
 
             res.SetContent(content);
